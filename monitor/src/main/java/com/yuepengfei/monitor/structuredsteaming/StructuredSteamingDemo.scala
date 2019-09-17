@@ -3,7 +3,6 @@ package com.yuepengfei.monitor.structuredsteaming
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions._
 
 /**
  * structuredSteaming现在只支持额kafka1.0，大部分公司使用的0.8，所以功能工作中暂时还用不到
