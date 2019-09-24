@@ -103,14 +103,12 @@ object SparkStreamingWordCountDemo {
     val time = new RDDTime()
     ds.foreachRDD { rdd =>
       accumulator.add(1L)
-      time.add(System.currentTimeMillis())
-      val start = System.currentTimeMillis()
       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
       rdd.foreachPartition { iter =>
         val o: OffsetRange = offsetRanges(TaskContext.get.partitionId)
         println(s"topic: ${o.topic}\npartition: ${o.partition}\nfromOffset: ${o.fromOffset}\nuntilOffset: ${o.untilOffset}")
       }
-      val end = System.currentTimeMillis()
+      time.add(System.currentTimeMillis())
       println(s"+++++++++++每个RDD生成时间间隔: ${(time.end - time.start)}秒++++++++++第${accumulator.value}个RDD++++++++每个RDD处理时间: ${(end - start) / 1000}秒+++++++++++++++++")
     }
   }

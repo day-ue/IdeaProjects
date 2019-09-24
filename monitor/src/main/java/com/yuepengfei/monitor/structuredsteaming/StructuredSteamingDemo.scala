@@ -15,8 +15,6 @@ object StructuredSteamingDemo {
     val sparkConf = new SparkConf().setMaster("local[*]").setAppName("StructuredSteamingDemo").set("spark.executor.memory", "1G")
 
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
-    import spark.implicits._
-
     val query = spark.readStream
       .format("kafka")
       .option("kafka.bootstrap.servers", "192.168.240.131:9092")
