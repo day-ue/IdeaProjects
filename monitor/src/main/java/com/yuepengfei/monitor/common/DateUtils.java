@@ -1,5 +1,6 @@
-package com.suning.flink.common;
+package com.yuepengfei.monitor.common;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -115,10 +116,10 @@ public class DateUtils {
      * 功能描述：是用ThreadLocal<SimpleDateFormat>来获取SimpleDateFormat,
      * 这样每个线程只会有一个SimpleDateFormat
      * 输入参数：Date date, String pattern
-     * @param 参数说明 返回值: Date date 需要格式化的日期, String pattern 格式化样式
+     * @param //参数说明 返回值: Date date 需要格式化的日期, String pattern 格式化样式
      * @return 返回值  String
      * @throw 异常描述
-     * @see 需要参见的其它内容
+     * @see //需要参见的其它内容
      */
     public static String format(Date date, String pattern) {
         return getSdf(pattern).format(date);
@@ -129,10 +130,10 @@ public class DateUtils {
      * 功能描述：是用ThreadLocal<SimpleDateFormat>来获取SimpleDateFormat,
      * 这样每个线程只会有一个SimpleDateFormat 
      * 输入参数：String dateStr, String pattern
-     * @param 参数说明 返回值: 类型 <说明>
+     * @param //参数说明 返回值: 类型 <说明>
      * @return 返回值 Date
      * @throw 异常描述
-     * @see 需要参见的其它内容
+     * @see //需要参见的其它内容
      */
     public static Date parse(String dateStr, String pattern) throws ParseException {
         return getSdf(pattern).parse(dateStr);
@@ -263,7 +264,7 @@ public class DateUtils {
 	/**
      * 功能描述: <br>
      * 〈功能详细描述〉
-     * @param ms
+     * @param //ms
      * @return
      * @see [相关类/方法](可选)
      * @since [产品/模块版本](可选)
@@ -303,7 +304,7 @@ public class DateUtils {
      * 
      * 功能描述:负数直接转为正值 返回正值的时间格式化后的数据 <br>
      * 〈功能详细描述〉
-     * @param lms
+     * @param //lms
      * @return
      * @see [相关类/方法](可选)
      * @since [产品/模块版本](可选)
@@ -321,11 +322,11 @@ public class DateUtils {
      * 
      * 功能描述：两个日期型相减
      * 输入参数：<按照参数定义顺序> 
-     * @param 参数说明
+     * @param //参数说明
      * 返回值:  类型 <说明> 
      * @return 返回值
      * @throw 异常描述
-     * @see 需要参见的其它内容
+     * @see //需要参见的其它内容
      */
     public static long subtractionDate(String startDate,String startPattern,String endDate,String endPattern) {
         
@@ -345,11 +346,11 @@ public class DateUtils {
      * 
      * 功能描述：两个日期型相减
      * 输入参数：<按照参数定义顺序> 
-     * @param 参数说明
+     * @param //参数说明
      * 返回值:  类型 <说明> 
      * @return 返回值
      * @throw 异常描述
-     * @see 需要参见的其它内容
+     * @see //需要参见的其它内容
      */
     public static long subtractionDate(String startDate,String endDate,String pattern) {
         

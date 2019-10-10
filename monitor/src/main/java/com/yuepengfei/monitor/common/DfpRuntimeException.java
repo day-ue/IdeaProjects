@@ -1,4 +1,4 @@
-package com.suning.flink.common;
+package com.yuepengfei.monitor.common;
 
 public class DfpRuntimeException extends RuntimeException {
 

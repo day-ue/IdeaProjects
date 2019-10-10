@@ -1,4 +1,4 @@
-package com.suning.flink.common;
+package com.yuepengfei.monitor.hbase;
 
 
 import com.jcraft.jsch.jce.MD5;
