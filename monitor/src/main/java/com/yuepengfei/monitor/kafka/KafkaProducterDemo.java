@@ -3,7 +3,9 @@ package com.yuepengfei.monitor.kafka;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.Random;
 
 public class KafkaProducterDemo {
     public static void main(String[] args) throws InterruptedException {
@@ -22,11 +24,21 @@ public class KafkaProducterDemo {
         props.put("value.serializer",
                 "org.apache.kafka.common.serialization.StringSerializer");
         KafkaProducer<String, String> kafkaProducer = new KafkaProducer<String, String>(props);
-        for (int i = 0; i < 10; i++) {
+
+        String[] words = {"spark", "suning", "spring", "flink", "kafka", "hadoop"};
+
+        int i = 0;
+        while (true) {
+            i++;
             // 发送数据 ,需要一个producerRecord对象,最少参数 String topic, V value
-            kafkaProducer.send(new ProducerRecord<String, String>("test", "订单信息！"+i));
-            Thread.sleep(100);
+            Random random = new Random();
+            kafkaProducer.send(new ProducerRecord<String, String>("test", words[random.nextInt(6)]));
+            Thread.sleep(1000);
+            if (i > 1000){
+                break;
+            }
         }
+
         kafkaProducer.close();
     }
 }

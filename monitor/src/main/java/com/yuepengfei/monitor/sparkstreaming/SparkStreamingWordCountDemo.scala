@@ -109,7 +109,7 @@ object SparkStreamingWordCountDemo {
         println(s"topic: ${o.topic}\npartition: ${o.partition}\nfromOffset: ${o.fromOffset}\nuntilOffset: ${o.untilOffset}")
       }
       time.add(System.currentTimeMillis())
-      println(s"+++++++++++每个RDD生成时间间隔: ${(time.end - time.start)}秒++++++++++第${accumulator.value}个RDD++++++++每个RDD处理时间: ${(end - start) / 1000}秒+++++++++++++++++")
+      println(s"+++++++++++每个RDD生成时间间隔: ${(time.end - time.start)}秒++++++++++第${accumulator.value}个RDD")
     }
   }
 

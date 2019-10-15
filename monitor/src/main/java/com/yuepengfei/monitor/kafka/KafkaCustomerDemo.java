@@ -12,7 +12,7 @@ public class KafkaCustomerDemo {
         // 1/连接集群
         Properties props = new Properties();
         props.put("bootstrap.servers", "192.168.240.131:9092");
-        props.put("group.id", "test");
+        props.put("group.id", "test2");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");
         props.put("key.deserializer",
@@ -21,7 +21,7 @@ public class KafkaCustomerDemo {
                 "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<String, String>(props);
         //2、发送数据 发送数据需要，订阅下要消费的topic。  test
-        kafkaConsumer.subscribe(Arrays.asList("test"));
+        kafkaConsumer.subscribe(Arrays.asList("testsink"));
         while (true) {
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(100);
             // jdk queue offer插入、poll获取元素。 blockingqueue put插入原生，take获取元素
