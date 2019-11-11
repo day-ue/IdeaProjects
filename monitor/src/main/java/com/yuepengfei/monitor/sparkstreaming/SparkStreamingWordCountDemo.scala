@@ -1,5 +1,9 @@
 package com.yuepengfei.monitor.sparkstreaming
 
+/**
+ * 这个是自己随手写的demo，其中实现了通过rdd操作数据流，手动实现滚动窗口，控制offset
+ */
+
 import java.lang
 import java.util.concurrent.{ArrayBlockingQueue, SynchronousQueue}
 
@@ -26,6 +30,7 @@ object SparkStreamingWordCountDemo {
 
     val sparkConf = new SparkConf().setMaster("local[*]").setAppName("SparkWordCountDemo").set("spark.executor.memory", "1G")
 
+    //实际开发中我们通常使用dataframe,所以必须创建sparksession，从而引入隐式转换
     val spark = SparkSession.builder().config(sparkConf).getOrCreate()
     import spark.implicits._
 
