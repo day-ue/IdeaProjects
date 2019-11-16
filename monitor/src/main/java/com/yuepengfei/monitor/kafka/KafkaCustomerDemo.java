@@ -20,8 +20,8 @@ public class KafkaCustomerDemo {
         props.put("value.deserializer",
                 "org.apache.kafka.common.serialization.StringDeserializer");
         KafkaConsumer<String, String> kafkaConsumer = new KafkaConsumer<String, String>(props);
-        //2、发送数据 发送数据需要，订阅下要消费的topic。  test
-        kafkaConsumer.subscribe(Arrays.asList("testsink"));
+        //2、发送数据 发送数据需要，订阅下要消费的topic。  test testsink
+        kafkaConsumer.subscribe(Arrays.asList("test"));
         while (true) {
             ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(100);
             // jdk queue offer插入、poll获取元素。 blockingqueue put插入原生，take获取元素

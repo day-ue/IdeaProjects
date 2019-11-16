@@ -32,7 +32,9 @@ public class KafkaProducterDemo {
             i++;
             // 发送数据 ,需要一个producerRecord对象,最少参数 String topic, V value
             Random random = new Random();
-            kafkaProducer.send(new ProducerRecord<String, String>("test", words[random.nextInt(6)]));
+            String message = words[random.nextInt(6)];
+            System.out.println(message);
+            kafkaProducer.send(new ProducerRecord<String, String>("test", message));
             Thread.sleep(1000);
             if (i > 1000){
                 break;
