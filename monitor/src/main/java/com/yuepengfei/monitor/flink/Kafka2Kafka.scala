@@ -43,7 +43,7 @@ object Kafka2Kafka {
       .map((_,1))
       .keyBy(_._1)
       .reduce((x,y)=>(y._1,x._2+y._2))
-      .map(x => x._1 + " --> " + x._2 + " == " + conf)//todo 尽管driver端的conf不停在变，但是task中的conf还是初始值
+      .map(x => x._1 + " --> " + x._2 + " == " + conf)//todo 尽管driver端的conf不停在变，但是task中的conf还是初始值。参考广播流
 
 
     val producerConfig = new Properties()
