@@ -43,11 +43,11 @@ object FlinkKafkaDemo {
 
       sumSource
       .map(param => WordWithCount(param._1, param._2))
-      /*.keyBy(_._1)
+      .keyBy(_.word)
       .window(TumblingProcessingTimeWindows.of(Time.seconds(5)))
-      .process(new WordCountWindow())*/
-      .windowAll(TumblingProcessingTimeWindows.of(Time.seconds(5)))
-      .process(new WordCountAllWindow())
+      .process(new WordCountWindow())
+      /*.windowAll(TumblingProcessingTimeWindows.of(Time.seconds(5)))
+      .process(new WordCountAllWindow())*/
       .setParallelism(1)
       .print()
       .setParallelism(1)
