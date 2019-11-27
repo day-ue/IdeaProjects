@@ -3,8 +3,10 @@ package com.yuepengfei.monitor.flink
 import java.lang
 import java.util.{Map, Random}
 
+import org.apache.commons.lang.time.FastDateFormat
 import org.apache.flink.api.common.state.{MapState, MapStateDescriptor, ValueState, ValueStateDescriptor}
 import org.apache.flink.api.scala._
+import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.apache.flink.streaming.api.functions.source.{RichParallelSourceFunction, SourceFunction}
 import org.apache.flink.streaming.api.scala.function.ProcessWindowFunction
 import org.apache.flink.streaming.api.scala.{DataStream, StreamExecutionEnvironment}
@@ -51,10 +53,11 @@ object TriggerDemo {
 
     dataStreamSource.map(Word(_,1)).setParallelism(1)
       .keyBy(_.word)
-      .window(TumblingProcessingTimeWindows.of(Time.seconds(60)))
+      .window(TumblingProcessingTimeWindows.of(Time.seconds(5*60)))
       .trigger(new MyTrigger)
-      .process(new MyProcess())
-      //.process(new MyProcessWin())
+      //window之后process必须继承ProcessWindowFunction型的。直接继承ProcessFunction,其实内部就可以实现window和trigger功能。
+      //.process(new MyProcess())
+      .process(new MyProcessWin())
       //.reduce((x,y)=>(x._1 , x._2 + y._2)).setParallelism(1)
       .print("keyword")
 
@@ -79,8 +82,9 @@ class MyProcess extends ProcessFunction[Word, Word]{
 case class Word(word: String, sum : Int)
 class MyProcessWin extends ProcessWindowFunction[Word, Word, String, TimeWindow]{
   /** process function维持的状态  */
+  lazy val stateDescriptor = new MapStateDescriptor[String, Int]("myState",classOf[String], classOf[Int])
   lazy val state: MapState[String, Int] = getRuntimeContext
-    .getMapState(new MapStateDescriptor[String, Int]("myState",classOf[String], classOf[Int]))
+    .getMapState(stateDescriptor)
 
   /**
    * @param key
@@ -100,6 +104,14 @@ class MyProcessWin extends ProcessWindowFunction[Word, Word, String, TimeWindow]
       out.collect(Word(x.getKey, x.getValue))
     })
   }
+
+  /**
+   * 窗口结束时调用此方法
+   * @param context
+   */
+  override def clear(context: Context): Unit = {
+    context.windowState.getMapState[String, Int](stateDescriptor).clear()
+  }
 }
 
 /**
@@ -107,39 +119,40 @@ class MyProcessWin extends ProcessWindowFunction[Word, Word, String, TimeWindow]
  */
 class MyTrigger extends Trigger[Any, TimeWindow]{
 
+  private val format: FastDateFormat = FastDateFormat.getInstance("yyyy-MM-dd HH:mm:ss")
+
   var count :Int= 0
   /**
-   * 猜想: 这里应给是1个task任务，消息达到10个触发一次计算
+   * 数据到来，先走这里，这里并非多任务。可能是在jobmanager内完场的，因此触发一次计算，
    */
   override def onElement(element: Any, timestamp: Long, window: TimeWindow, ctx: Trigger.TriggerContext): TriggerResult =
     {
       count = count + 1
       if(count%10 == 0){
-        println(s"----------------------------每10个消息触发一次计算${System.currentTimeMillis()}-------------------------------")
+        println(s"-------------------${format.format(window.getStart)}------------------${format.format(window.getEnd)}----------------------")
         return TriggerResult.FIRE
       }else{
+        //注册定时器（有默认的定时器，只是这里可以添加自己想要的定时器）（定时器的队列是set集合，因此不怕重复注册）
         ctx.registerProcessingTimeTimer(window.maxTimestamp)
         return TriggerResult.CONTINUE
       }
     }
 
   /**
-   * 并行度为3则触发三次，所以这个类的代码不同的task各一份（猜想）
+   * 并行度为3则触发三次
+   * 猜想：这个方法是窗口结束时的回调，后续任务是3，就触发三次回调。其实这段代码还在driver端
    */
   override def onProcessingTime(time: Long, window: TimeWindow, ctx: Trigger.TriggerContext): TriggerResult = {
-    println(s"--------------------------------一个滚动窗口触发一次计算${System.currentTimeMillis()}-------------------------------------")
+    println(s"--------------------------------滚动窗口触发计算-------------------------------------")
     TriggerResult.FIRE_AND_PURGE
   }
 
   override def onEventTime(time: Long, window: TimeWindow, ctx: Trigger.TriggerContext): TriggerResult = return TriggerResult.CONTINUE
 
-  /**
-   *窗口内的数据清除了，但是state还是存在的
-   */
   @throws[Exception]
   override def clear(window: TimeWindow, ctx: Trigger.TriggerContext): Unit = {
+    //这里清除的是定时器
     ctx.deleteProcessingTimeTimer(window.maxTimestamp)
-    println(s"--------------------------------------清理窗口数据${System.currentTimeMillis()}----------------------------------------------------")
   }
 
   override def canMerge = true
