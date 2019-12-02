@@ -24,7 +24,6 @@ import scala.collection.JavaConverters._
  * 开1天的滚动窗口，5min触发一次计算
  */
 
-//todo 未完成
 
 object TriggerDemo {
   def main(args: Array[String]): Unit = {
@@ -58,7 +57,6 @@ object TriggerDemo {
       //window之后process必须继承ProcessWindowFunction型的。直接继承ProcessFunction,其实内部就可以实现window和trigger功能。
       //.process(new MyProcess())
       .process(new MyProcessWin())
-      //.reduce((x,y)=>(x._1 , x._2 + y._2)).setParallelism(1)
       .print("keyword")
 
     env.execute("triggerDemo")

@@ -12,8 +12,9 @@ import org.apache.flink.api.scala._
 import org.apache.flink.runtime.state.filesystem.FsStateBackend
 import org.apache.flink.streaming.api.datastream.DataStreamSink
 import org.apache.flink.streaming.connectors.elasticsearch.{ElasticsearchSinkFunction, RequestIndexer}
-import org.apache.flink.streaming.connectors.elasticsearch5.ElasticsearchSink
+import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink
 import org.elasticsearch.client.Requests
+import org.elasticsearch.common.xcontent.XContentType
 
 
 object Kafka2ES {
@@ -39,17 +40,7 @@ object Kafka2ES {
     val addressList = new util.ArrayList[InetSocketAddress]()
     addressList.add(new InetSocketAddress(InetAddress.getByName("127.0.0.1"), 9300))
 
-    dataStreamSource.addSink(new ElasticsearchSink[String](userConf
-      ,addressList
-      ,new ElasticsearchSinkFunction[String] {
-        override def process(t: String, runtimeContext: RuntimeContext, requestIndexer: RequestIndexer): Unit = {
-          requestIndexer.add(Requests
-            .indexRequest()
-            .index("")
-            .`type`("")
-            .source(new util.HashMap[String, String]().put("data", t)))
-        }
-      }))
+    dataStreamSource.print("")
 
     env.execute("From kafka to es")
   }

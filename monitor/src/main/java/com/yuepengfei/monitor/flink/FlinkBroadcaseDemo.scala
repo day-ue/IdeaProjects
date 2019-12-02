@@ -37,6 +37,8 @@ object FlinkBroadcaseDemo {
     }).withBroadcastSet(toBroadcast, "broadcastSetName") // 2. Broadcast the DataSet
 
 
-    result.print()
+    result.print("~~")
+
+    env.execute("fuck")
   }
 }
