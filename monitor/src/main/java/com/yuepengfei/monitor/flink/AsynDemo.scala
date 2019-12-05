@@ -37,10 +37,16 @@ import java.util.List
 
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.streaming.api.functions.ProcessFunction
+import org.elasticsearch.client.transport.TransportClient
 import org.elasticsearch.common.settings.Settings
 import org.elasticsearch.common.transport.TransportAddress
+import org.elasticsearch.common.unit.TimeValue
 import org.elasticsearch.common.xcontent.XContentType
+import org.elasticsearch.index.query.{QueryBuilders, TermQueryBuilder}
+import org.elasticsearch.index.reindex.DeleteByQueryAction
 import org.elasticsearch.transport.client.PreBuiltTransportClient
+
+import scala.collection.mutable
 
 /**
  * 实现公司的预警场景
@@ -132,7 +138,7 @@ object HandleStream{
     //异步关联一个es的维表，拿到数据后直接删除es中对应的数据
     val esAndStream: DataStream[(WordTime, String)] = AsyncDataStream.unorderedWait(dsAndES, new AsyncFunction[WordTime, (WordTime, String)] {
       /** The database specific client that can issue concurrent requests with callbacks */
-      lazy val client = new PreBuiltTransportClient(Settings.builder.put("cluster.name", "docker-cluster").build)
+      lazy val client: TransportClient = new PreBuiltTransportClient(Settings.builder.put("cluster.name", "docker-cluster").build)
         .addTransportAddress(new TransportAddress(InetAddress.getByName("192.168.240.131"), 9300))
 
       /** The context used for the future callbacks */
@@ -142,24 +148,25 @@ object HandleStream{
 
         // issue the asynchronous request, receive a future for the result
         val resultFutureRequested: Future[String] = Future {
-          val searchResponse = client.prepareSearch("word_time_flag1").setTypes("doc").setQuery(new Nothing("word", input.word)).get
+          val searchResponse = client.prepareSearch("word_time_flag1").setTypes("doc").setQuery(new TermQueryBuilder("word", input.word)).get
           val hits = searchResponse.getHits
           val hits1 = hits.getHits
           val jsonStrs = new util.ArrayList[String]()
           for (documentFields <- hits1) {
+            val id: String = documentFields.getId
             val sourceAsString = documentFields.getSourceAsString
             jsonStrs.add(sourceAsString)
           }
+          DeleteByQueryAction.INSTANCE.newRequestBuilder(client).filter(QueryBuilders.termQuery("word",input.word)).source("word_time_flag1").get(TimeValue.timeValueSeconds(5))
           StringUtils.join(jsonStrs,"#&#")
         }
-
         // set the callback to be executed once the request by the client is complete
         // the callback simply forwards the result to the result future
         resultFutureRequested.onSuccess {
           case result: String => resultFuture.complete(Iterable((input, result)))
         }
       }
-    }, 1000, TimeUnit.MILLISECONDS, 1)
+    }, 60*1000, TimeUnit.MILLISECONDS, 1)
     esAndStream.process(new ProcessFunction[(WordTime, String), WordTime]{
         lazy private val gson = new Gson()
         override def processElement(value: (WordTime, String), ctx: ProcessFunction[(WordTime, String), WordTime]#Context, out: Collector[WordTime]): Unit = {
