@@ -142,7 +142,7 @@ object HandleStream{
 
         // issue the asynchronous request, receive a future for the result
         val resultFutureRequested: Future[String] = Future {
-          val searchResponse = client.prepareSearch("indexsearch").setTypes("mysearch").setQuery(new Nothing("say", "营长")).get
+          val searchResponse = client.prepareSearch("word_time_flag1").setTypes("doc").setQuery(new Nothing("word", input.word)).get
           val hits = searchResponse.getHits
           val hits1 = hits.getHits
           val jsonStrs = new util.ArrayList[String]()
@@ -159,7 +159,7 @@ object HandleStream{
           case result: String => resultFuture.complete(Iterable((input, result)))
         }
       }
-    }, 1000, TimeUnit.MILLISECONDS, 1 * 1000)
+    }, 1000, TimeUnit.MILLISECONDS, 1)
     esAndStream.process(new ProcessFunction[(WordTime, String), WordTime]{
         lazy private val gson = new Gson()
         override def processElement(value: (WordTime, String), ctx: ProcessFunction[(WordTime, String), WordTime]#Context, out: Collector[WordTime]): Unit = {
