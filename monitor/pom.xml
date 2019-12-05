@@ -222,6 +222,13 @@
         </dependency>
 
 
+        <!--es-->
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>transport</artifactId>
+            <version>6.5.0</version>
+        </dependency>
+
         <!--kafka-->
         <dependency>
             <groupId>org.apache.kafka</groupId>
