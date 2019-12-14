@@ -31,10 +31,11 @@ import org.apache.flink.streaming.connectors.elasticsearch.{ElasticsearchSinkFun
 import org.apache.flink.streaming.connectors.elasticsearch6.ElasticsearchSink
 import org.apache.http.HttpHost
 import org.elasticsearch.action.index.IndexRequest
-import org.elasticsearch.client.Requests
+import org.elasticsearch.client.{Requests, RestHighLevelClient}
 import java.util.ArrayList
 import java.util.List
 
+import com.yuepengfei.monitor.es.EsUtils
 import org.apache.commons.lang3.StringUtils
 import org.apache.flink.streaming.api.functions.ProcessFunction
 import org.elasticsearch.client.transport.TransportClient
@@ -47,6 +48,8 @@ import org.elasticsearch.index.reindex.DeleteByQueryAction
 import org.elasticsearch.transport.client.PreBuiltTransportClient
 
 import scala.collection.mutable
+import scala.collection.JavaConverters._
+
 
 /**
  * 实现公司的预警场景
@@ -138,8 +141,8 @@ object HandleStream{
     //异步关联一个es的维表，拿到数据后直接删除es中对应的数据
     val esAndStream: DataStream[(WordTime, String)] = AsyncDataStream.unorderedWait(dsAndES, new AsyncFunction[WordTime, (WordTime, String)] {
       /** The database specific client that can issue concurrent requests with callbacks */
-      lazy val client: TransportClient = new PreBuiltTransportClient(Settings.builder.put("cluster.name", "docker-cluster").build)
-        .addTransportAddress(new TransportAddress(InetAddress.getByName("192.168.240.131"), 9300))
+
+      lazy val client: RestHighLevelClient = EsUtils.getClient()
 
       /** The context used for the future callbacks */
       implicit lazy val executor: ExecutionContext = ExecutionContext.fromExecutor(Executors.directExecutor())
@@ -148,16 +151,12 @@ object HandleStream{
 
         // issue the asynchronous request, receive a future for the result
         val resultFutureRequested: Future[String] = Future {
-          val searchResponse = client.prepareSearch("word_time_flag1").setTypes("doc").setQuery(new TermQueryBuilder("word", input.word)).get
-          val hits = searchResponse.getHits
-          val hits1 = hits.getHits
           val jsonStrs = new util.ArrayList[String]()
-          for (documentFields <- hits1) {
-            val id: String = documentFields.getId
-            val sourceAsString = documentFields.getSourceAsString
-            jsonStrs.add(sourceAsString)
+          val hm = EsUtils.queryTerm(client, "word_time_flag1", "doc", "word", input.word)
+          for ((id, source) <- hm.asScala) {
+            jsonStrs.add(source)
           }
-          DeleteByQueryAction.INSTANCE.newRequestBuilder(client).filter(QueryBuilders.termQuery("word",input.word)).source("word_time_flag1").get(TimeValue.timeValueSeconds(5))
+          EsUtils.deleteByQuery(client, "word_time_flag1", "doc", "word", input.word)
           StringUtils.join(jsonStrs,"#&#")
         }
         // set the callback to be executed once the request by the client is complete
