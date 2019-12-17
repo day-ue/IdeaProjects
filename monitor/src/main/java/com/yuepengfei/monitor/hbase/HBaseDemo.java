@@ -20,7 +20,7 @@ public class HBaseDemo {
     public void init(){
 
         conf = HBaseConfiguration.create();
-        conf.set("hbase.zookeeper.quorum","node01:2181,node02:2181,node03:2181");
+        conf.set("hbase.zookeeper.quorum","192.168.240.131:2181");
 
         try {
             connection = ConnectionFactory.createConnection(conf);
@@ -126,7 +126,7 @@ public class HBaseDemo {
     @Test
     public void scan() throws IOException {
         //获取表操作对象
-        TableName student = TableName.valueOf("student");
+        TableName student = TableName.valueOf("user");
         Table table = connection.getTable(student);
         Scan scan = new Scan();
         ResultScanner results = table.getScanner(scan);

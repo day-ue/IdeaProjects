@@ -237,6 +237,12 @@
         </dependency>
 
 
+        <!--     zk   -->
+        <dependency>
+            <groupId>com.101tec</groupId>
+            <artifactId>zkclient</artifactId>
+            <version>0.8</version>
+        </dependency>
 
         <!--kafka-->
         <dependency>
