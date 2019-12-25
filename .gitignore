@@ -3,3 +3,4 @@ monitor/.idea/
 monitor/target/
 pythoncode/.idea/
 monitor/data/flink/checkpoint/
+monitor/data/
