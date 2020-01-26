@@ -55,34 +55,6 @@ object DroppedWordsCounter {
   }
 }
 
-/**
- * Counts words in text encoded with UTF8 received from the network every second. This example also
- * shows how to use lazily instantiated singleton instances for Accumulator and Broadcast so that
- * they can be registered on driver failures.
- *
- * Usage: RecoverableNetworkWordCount <hostname> <port> <checkpoint-directory> <output-file>
- *   <hostname> and <port> describe the TCP server that Spark Streaming would connect to receive
- *   data. <checkpoint-directory> directory to HDFS-compatible file system which checkpoint data
- *   <output-file> file to which the word counts will be appended
- *
- * <checkpoint-directory> and <output-file> must be absolute paths
- *
- * To run this on your local machine, you need to first run a Netcat server
- *
- *      `$ nc -lk 9999`
- *
- * and run the example as
- *
- *      `$ ./bin/run-example org.apache.spark.examples.streaming.RecoverableNetworkWordCount \
- *              localhost 9999 ~/checkpoint/ ~/out`
- *
- * If the directory ~/checkpoint/ does not exist (e.g. running for the first time), it will create
- * a new StreamingContext (will print "Creating new context" to the console). Otherwise, if
- * checkpoint data exists in ~/checkpoint/, then it will create StreamingContext from
- * the checkpoint data.
- *
- * Refer to the online documentation for more details.
- */
 object RecoverableNetworkWordCount {
 
   def createContext(ip: String, port: Int, outputPath: String, checkpointDirectory: String)

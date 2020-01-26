@@ -56,7 +56,7 @@ object PrdKafkaWordCount {
     } else {
       val topicTartitions = ranges.map(_.topicPartition())
       val offsets = ranges.map(x=>{x.topicPartition() -> x.untilOffset}).toMap
-      ds = KafkaUtils.createDirectStream[String, String](scc, PreferConsistent, ConsumerStrategies.Assign[String, String](topicTartitions ,kafkaParams,offsets))
+      ds = KafkaUtils.createDirectStream[String, String](scc, PreferConsistent, ConsumerStrategies.Assign[String, String](topicTartitions, kafkaParams, offsets))
     }
 
     ds.foreachRDD {rdd =>{
