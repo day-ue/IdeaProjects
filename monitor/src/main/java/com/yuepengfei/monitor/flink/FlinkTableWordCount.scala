@@ -26,8 +26,8 @@ object FlinkTableWordCount {
     val tEnv = StreamTableEnvironment.create(env)
 
     val props = new Properties
-    props.put("bootstrap.servers", "192.168.240.131:9092")
-    props.put("zookeeper.connect", "192.168.240.131:2181")
+    props.put("bootstrap.servers", "localhost:9092")
+    props.put("zookeeper.connect", "localhost:2181")
     props.put("group.id", "fuck")
     props.put("key.deserializer", "org.apache.kafka.common.serialization.StringDeserializer") //key 反序列化
     props.put("value.deserializer", "org.apache.kafka.common.serialization.StringDeserializer")//value 反序列化

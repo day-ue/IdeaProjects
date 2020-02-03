@@ -11,7 +11,7 @@ public class KafkaCustomerDemo {
     public static void main(String[] args) {
         // 1/连接集群
         Properties props = new Properties();
-        props.put("bootstrap.servers", "192.168.240.131:9092");
+        props.put("bootstrap.servers", "localhost:9092");
         props.put("group.id", "test2");
         props.put("enable.auto.commit", "true");
         props.put("auto.commit.interval.ms", "1000");

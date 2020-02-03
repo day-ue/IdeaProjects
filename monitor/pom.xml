@@ -16,7 +16,7 @@
         <spark.version>2.4.4</spark.version>
         <hadoop.version>2.6.5</hadoop.version>
         <jackson.version>2.6.2</jackson.version>
-        <flink.version>1.8.0</flink.version>
+        <flink.version>1.8.1</flink.version>
         <log4j.version>1.2.17</log4j.version>
         <quartz.version>2.2.3</quartz.version>
         <slf4j.version>1.7.22</slf4j.version>
@@ -25,12 +25,34 @@
         <jedis.version>2.9.0</jedis.version>
         <akka.version>2.5.27</akka.version>
         <delta.version>0.5.0</delta.version>
+        <groovy.version>2.5.9</groovy.version>
         <encoding>UTF-8</encoding>
 <!--        <scope.version>provided</scope.version>-->
         <scope.version>compile</scope.version>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-core</artifactId>
+            <version>RELEASE</version>
+        </dependency>
+
+
+
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+            <version>${groovy.version}</version>
+        </dependency>
+
         <!--    binlog解析    -->
         <dependency>
             <groupId>tech.mlsql</groupId>
@@ -226,14 +248,14 @@
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-api-scala-bridge_2.11</artifactId>
-            <version>1.8.1</version>
+            <version>${flink.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.flink/flink-table-planner -->
         <dependency>
             <groupId>org.apache.flink</groupId>
             <artifactId>flink-table-planner_2.11</artifactId>
-            <version>1.8.1</version>
+            <version>${flink.version}</version>
         </dependency>
         <!--   web页面     -->
         <dependency>
