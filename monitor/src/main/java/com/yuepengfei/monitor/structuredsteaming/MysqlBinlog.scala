@@ -14,21 +14,21 @@ object MysqlBinlog extends App {
 
   val df = spark.readStream.
     format("org.apache.spark.sql.mlsql.sources.MLSQLBinLogDataSource").
-    option("host","192.168.240.131").
+    option("host","localhost").
     option("port","3306").
-    option("userName","root").
-    option("password","123456").
-    option("databaseNamePattern","test").
-    option("tableNamePattern","mlsql_binlog").
-    option("bingLogNamePrefix","mysql-bin").
+    option("userName","dayue").
+    option("password","111111").
+    option("databaseNamePattern","dayue_test").
+    option("tableNamePattern","student").
+    option("bingLogNamePrefix","student").
     option("binlogIndex","10").
     option("binlogFileOffset","90840").
     load()
 
   val query = df.writeStream.
     format("org.apache.spark.sql.delta.sources.MLSQLDeltaDataSource").
-    option("__path__","/tmp/datahouse/{db}/{table}").
-    option("path","{db}/{table}").
+    option("__path__","./data/spark-warehouse/dayue_test/student").
+    option("path","dayue_test/student").
     option("mode","Append").
     option("idCols","id").
     option("duration","3").

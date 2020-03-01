@@ -23,16 +23,16 @@ import scala.collection.JavaConverters._
  * 实际生产中kafka消费，维护offset
  */
 
-object PrdKafkaWordCount {
+object PrdKafkaWordCount extends sparkTrait {
 
   def main(args: Array[String]): Unit = {
-    Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
+    /*Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)
     Logger.getLogger("org.eclipse.jetty.server").setLevel(Level.ERROR)
 
     val sparkConf = new SparkConf().setMaster("local[*]").setAppName("SparkWordCountDemo").set("spark.executor.memory", "1G")
 
     //实际开发中我们通常使用dataframe,所以必须创建sparksession，从而引入隐式转换
-    val spark = SparkSession.builder().config(sparkConf).getOrCreate()
+    val spark = SparkSession.builder().config(sparkConf).getOrCreate()*/
     import spark.implicits._
 
     val scc = new StreamingContext(spark.sparkContext, Seconds(10))

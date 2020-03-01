@@ -7,7 +7,7 @@ import org.apache.hadoop.hbase.util.Bytes;
 import org.apache.log4j.PropertyConfigurator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import scala.tools.jline_embedded.internal.Configuration;
+
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

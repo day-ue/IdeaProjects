@@ -86,7 +86,7 @@ object ItemSimilarity extends Serializable {
   }
 
   /**
-   * 余弦相似度矩阵计算.
+   * 余弦相似度矩阵计算.这里采用的都是预先相似度
    * T(x,y) = ∑x(i)y(i) / sqrt(∑(x(i)*x(i))) * sqrt(∑(y(i)*y(i)))
    * @param1 user_rdd 用户评分
    * @param1 RDD[ItemSimi] 返回物品相似度

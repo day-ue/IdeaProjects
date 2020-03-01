@@ -26,6 +26,20 @@ public class Main {
     }
 
     @Test
+    public void classLoaderString() throws Exception{
+        GroovyClassLoader loader = new GroovyClassLoader();
+        Class aClass = loader.parseClass("def plus(int a, int b){\n" +
+                "        return a+b\n" +
+                "    }");
+        GroovyObject groovyObject = (GroovyObject) aClass.newInstance();
+        //这里不能用int数组，具体为啥我也不知道
+        Integer[] param = {1, 2};
+        Integer result = (Integer)groovyObject.invokeMethod("plus", param);
+        System.out.println(result);
+    }
+
+
+    @Test
     public void scriptEngine() throws Exception{
         GroovyScriptEngine engine = new GroovyScriptEngine("./src/main/java/com/yuepengfei/monitor/groovy/");
         Class aClass = engine.loadScriptByName("GroovyApp.groovy");
