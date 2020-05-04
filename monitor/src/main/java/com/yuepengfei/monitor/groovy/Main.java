@@ -2,6 +2,7 @@ package com.yuepengfei.monitor.groovy;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
+import groovy.lang.GroovyShell;
 import groovy.util.GroovyScriptEngine;
 import org.junit.Test;
 
@@ -47,5 +48,11 @@ public class Main {
         groovyObject.invokeMethod("hello", "你最美丽");
     }
 
+    @Test
+    public void  shellGroovy(){
+        GroovyShell groovyShell = new GroovyShell();
+        groovyShell.evaluate("println(\"he\")");
+
+    }
 
 }

@@ -120,7 +120,7 @@ object RecoverableNetworkWordCount {
       System.exit(1)
     }
 
-    val Array(ip, port, checkpointDirectory, outputPath) = Array("192.168.240.131", "9999", "./data/spark/checkpoint", "./data/out")
+    val Array(ip, port, checkpointDirectory, outputPath) = Array("localhost", "9999", "./data/spark/checkpoint", "./data/out")
     val ssc = StreamingContext.getOrCreate(checkpointDirectory,
       () => createContext(ip, port.toInt, outputPath, checkpointDirectory))
     ssc.start()
