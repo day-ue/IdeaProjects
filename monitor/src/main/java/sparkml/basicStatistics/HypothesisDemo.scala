@@ -1,8 +1,8 @@
 package sparkml.basicStatistics
 
-import com.yuepengfei.monitor.sparkstreaming.sparkTrait
+import com.yuepengfei.monitor.sparkstreaming.SparkTrait
 
-object HypothesisDemo extends App with sparkTrait{
+object HypothesisDemo extends App with SparkTrait{
   import org.apache.spark.ml.linalg.{Vector, Vectors}
   import org.apache.spark.ml.stat.ChiSquareTest
   import spark.implicits._

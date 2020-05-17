@@ -1,13 +1,13 @@
 package sparkml.pipelines
 
-import com.yuepengfei.monitor.sparkstreaming.sparkTrait
+import com.yuepengfei.monitor.sparkstreaming.SparkTrait
 import org.apache.spark.ml.{Pipeline, PipelineModel}
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.feature.{HashingTF, Tokenizer}
 import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.sql.Row
 
-object PipelineExample extends App with sparkTrait{
+object PipelineExample extends App with SparkTrait{
 
   // $example on$
   // Prepare training documents from a list of (id, text, label) tuples.

@@ -13,6 +13,7 @@ object ReadMySQL {
     val prop = new Properties()
     prop.put("user","dayue")
     prop.put("password","111111")
+    //val table = "(select * from student where name = 'xiaoming') as temp"
     val df = spark.read.jdbc("jdbc:mysql://127.0.0.1:3306/dayue_test", "student", prop)
     df.show()
 

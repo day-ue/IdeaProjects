@@ -1,13 +1,13 @@
 package sparkml.pipelines
 
 // $example on$
-import com.yuepengfei.monitor.sparkstreaming.sparkTrait
+import com.yuepengfei.monitor.sparkstreaming.SparkTrait
 import org.apache.spark.ml.classification.LogisticRegression
 import org.apache.spark.ml.linalg.{Vector, Vectors}
 import org.apache.spark.ml.param.ParamMap
 import org.apache.spark.sql.Row
 
-object EstimatorTransformerParamExample extends App with sparkTrait{
+object EstimatorTransformerParamExample extends App with SparkTrait{
 
   // $example on$
   // Prepare training data from a list of (label, features) tuples.

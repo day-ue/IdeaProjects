@@ -49,6 +49,7 @@ object SmallFile {
       }
       }
       // 销毁广播变量
+      //bc_files.unpersist()
       bc_files.destroy()
     })
     // 启动流
@@ -59,7 +60,7 @@ object SmallFile {
   // 重命名文件及重新创建文件
   def renameAndCreateFile(fileName: String) {
     val file = new File(fileName)
-    file.renameTo(new File(fileName + "_tmp"))
+    file.renameTo(new File(fileName + "_" + System.currentTimeMillis() + "_tmp"))
     val newFile = new File(fileName)
     if (!newFile.exists()) {
       newFile.createNewFile()

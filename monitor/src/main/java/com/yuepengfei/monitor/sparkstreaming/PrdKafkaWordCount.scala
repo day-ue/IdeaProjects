@@ -23,7 +23,7 @@ import scala.collection.JavaConverters._
  * 实际生产中kafka消费，维护offset
  */
 
-object PrdKafkaWordCount extends sparkTrait {
+object PrdKafkaWordCount extends SparkTrait {
 
   def main(args: Array[String]): Unit = {
     /*Logger.getLogger("org.apache.spark").setLevel(Level.ERROR)

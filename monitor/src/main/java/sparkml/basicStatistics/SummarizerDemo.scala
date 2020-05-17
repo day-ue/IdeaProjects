@@ -1,8 +1,8 @@
 package sparkml.basicStatistics
 
-import com.yuepengfei.monitor.sparkstreaming.sparkTrait
+import com.yuepengfei.monitor.sparkstreaming.SparkTrait
 
-object SummarizerDemo extends App with sparkTrait {
+object SummarizerDemo extends App with SparkTrait {
   import org.apache.spark.ml.linalg.{Vector, Vectors}
   import org.apache.spark.ml.stat.Summarizer
   import spark.implicits._

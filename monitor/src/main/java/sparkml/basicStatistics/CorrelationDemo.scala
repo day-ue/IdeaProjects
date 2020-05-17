@@ -1,10 +1,10 @@
 package sparkml.basicStatistics
-import com.yuepengfei.monitor.sparkstreaming.sparkTrait
+import com.yuepengfei.monitor.sparkstreaming.SparkTrait
 import org.apache.spark.ml.linalg.{Matrix, Vectors}
 import org.apache.spark.ml.stat.Correlation
 import org.apache.spark.sql.Row
 
-object CorrelationDemo  extends App with sparkTrait{
+object CorrelationDemo  extends App with SparkTrait{
 
   import spark.implicits._
 

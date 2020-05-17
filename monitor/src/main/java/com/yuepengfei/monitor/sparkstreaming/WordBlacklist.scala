@@ -66,7 +66,7 @@ object RecoverableNetworkWordCount {
     val outputFile = new File(outputPath)
     if (outputFile.exists()) outputFile.delete()
     val sparkConf = new SparkConf().setAppName("RecoverableNetworkWordCount").setMaster("local[*]")
-    //设定sparkStreamin优雅的关闭
+    //设定sparkStreaming优雅的关闭
     sparkConf.set("spark.streaming.stopGracefullyOnShutdown", "true")
     // Create the context with a 1 second batch size
     val ssc = new StreamingContext(sparkConf, Seconds(10))
