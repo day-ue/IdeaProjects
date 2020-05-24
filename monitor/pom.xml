@@ -340,6 +340,13 @@
         </dependency>
 
 
+        <!-- ssh远程调用的依赖 -->
+        <dependency>
+            <groupId>ch.ethz.ganymed</groupId>
+            <artifactId>ganymed-ssh2</artifactId>
+            <version>build210</version>
+        </dependency>
+
 
     </dependencies>
 

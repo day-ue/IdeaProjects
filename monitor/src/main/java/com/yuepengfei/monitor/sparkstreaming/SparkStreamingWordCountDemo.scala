@@ -38,7 +38,7 @@ object SparkStreamingWordCountDemo {
     scc.checkpoint("./data/checkpoint")
 
     val kafkaParams: Map[String, Object] = Map[String, Object](
-      "bootstrap.servers" -> "192.168.240.131:9092",
+      "bootstrap.servers" -> "localhost:9092",
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       "group.id" -> "use_a_separate_group_id_for_each_stream",
@@ -49,13 +49,13 @@ object SparkStreamingWordCountDemo {
     val ds = KafkaUtils.createDirectStream[String, String](scc, PreferConsistent, Subscribe[String, String](topics, kafkaParams))
 
     //1. 常规的window函数完成计算
-    //executeWindow(ds)
+    executeWindow(ds)
 
     //遍历每个rdd对其进行操作
     //2. operation1RDD(spark, ds)
 
     //3. 遍历每一个rdd, 自己完成窗口操作
-    operation2RDD(spark, ds, kafkaParams)
+    //operation2RDD(spark, ds, kafkaParams)
 
     scc.start()
     scc.awaitTermination()
