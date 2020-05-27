@@ -35,8 +35,8 @@ public class KafkaProducterDemo {
             String message = words[random.nextInt(6)];
             System.out.println(message);
             kafkaProducer.send(new ProducerRecord<String, String>("test", message));
-            Thread.sleep(1000);
-            if (i > 1000){
+            Thread.sleep(10);
+            if (i > 10000){
                 break;
             }
         }

@@ -18,7 +18,6 @@ object Flume2Delta extends App {
   //启动kafka
 /*  private val t1 = new Thread(new Runnable {
     override def run(): Unit = {
-//      val executor = new RemoteShellExecutor("localhost", "dayue", "YPF13526658232")
       val executor = Runtime.getRuntime
       executor.exec("/home/dayue/start/zkStart.py")
       Thread.sleep(30*1000)
@@ -30,9 +29,8 @@ object Flume2Delta extends App {
   //启动flume
 /*  private val t2 = new Thread(new Runnable {
     override def run(): Unit = {
-//      val executor = new RemoteShellExecutor("localhost", "dayue", "YPF13526658232")
       val executor = Runtime.getRuntime
-      executor.exec("/home/dayue/app/apache-flume-1.9.0-bin/bin/flume-ng agent -c /home/dayue/app/apache-flume-1.9.0-bin/conf -f /home/dayue/app/apache-flume-1.9.0-bin/conf/my_test_log.conf -n agent1 -Dflume.root.logger=INFO,console")
+      executor.exec("/home/dayue/app/apache-flume-1.9.0-bin/bin/flume-ng agent -c /home/dayue/app/apache-flume-1.9.0-bin/conf -f /home/dayue/app/apache-flume-1.9.0-bin/conf/my_test_log.conf -n pro -Dflume.root.logger=INFO,console")
     }
     Thread.sleep(50*1000)
   }).start()*/
