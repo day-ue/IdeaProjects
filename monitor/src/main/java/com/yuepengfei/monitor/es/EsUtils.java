@@ -4,6 +4,8 @@ import org.apache.http.HttpHost;
 import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.*;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
@@ -16,7 +18,10 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -30,15 +35,39 @@ public class EsUtils {
      * 初始化客户端
      * @return RestHighLevelClient
      */
-    public static RestHighLevelClient getClient(){
+    public static RestHighLevelClient getClient(String path){
         RestHighLevelClient client = new RestHighLevelClient(
                 RestClient.builder(
-                        new HttpHost("192.168.240.131", 9200, "http")));
+                        new HttpHost(path, 9200, "http")));
         return client;
     }
 
 
     //增
+    public static int addByKey(RestHighLevelClient client, String index, String type, String key,Map<String, Object> map) throws IOException {
+        IndexRequest source = new IndexRequest(index, type, key).source(map);
+        IndexResponse response = client.index(source, RequestOptions.DEFAULT);
+        return response.status().getStatus();
+    }
+
+    public static int addBulk(RestHighLevelClient client, String index, String type, ArrayList<HashMap<String, String>> mapList) throws IOException {
+        BulkRequest request = new BulkRequest();
+        mapList.stream().forEach( map -> {
+            IndexRequest source = null;
+            if(map.get("key") == null){
+                source = new IndexRequest(index, type).source(map);
+            } else {
+                source = new IndexRequest(index, type, map.get("key").toString()).source(map);
+            }
+            request.add(source);
+        });
+        if (mapList.isEmpty()){
+            return 250;
+        }
+        BulkResponse bulkResponse = client.bulk(request, RequestOptions.DEFAULT);
+        int status = bulkResponse.status().getStatus();
+        return status;
+    }
     //删
 
     /**
@@ -139,11 +168,19 @@ public class EsUtils {
 
 
     public static void main(String[] args) throws IOException {
-        RestHighLevelClient client = EsUtils.getClient();
+        RestHighLevelClient client = EsUtils.getClient("192.168.124.131");
         HashMap<String, String> hm = EsUtils.queryTermScroll(client, "word_time_flag", "doc", "word", "spark");
         for (String key : hm.keySet()) {
             System.out.println(key+"    --> "+hm.get(key));
         }
+        /*HashMap<String, String> hashMap = new HashMap<>();
+        HashMap<String, String> hashMap2 = new HashMap<>();
+        hashMap.put("key", "1");
+        hashMap2.put("key", "2");
+        ArrayList<HashMap<String, String>> hashMaps = new ArrayList<>();
+        hashMaps.add(hashMap);
+        hashMaps.add(hashMap2);
+        EsUtils.addBulk(client, "my_document", "doc", hashMaps);*/
         client.close();
     }
 
