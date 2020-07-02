@@ -1,6 +1,7 @@
 package com.yuepengfei.monitor.spark
 
 import org.apache.spark.SparkConf
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.SparkSession
 
 import scala.collection.mutable.ArrayBuffer
@@ -18,14 +19,19 @@ object WordCount extends App {
     data.append(words(random.nextInt(6)))
   }
 
+  print("开始执行")
 
   spark
     .sparkContext
     .parallelize(data)
     .map((_, 1))
-    .reduceByKey(_+_)
-    .foreach(x => println(x))
+    .reduceByKey(_ + _)
+    .foreach(x => {
+      Thread.sleep(5000)
+      println(x)
+    })
 
+  print("执行结束")
 
   spark.stop()
 }

@@ -34,7 +34,6 @@ object TFIDFdemo extends App {
 
 
   import spark.implicits._
-//  private val value: RDD[(String, collection.Map[String, AnyRef])] = EsSpark.esRDD(spark.sparkContext, "my_document/doc", query)
   private val df: DataFrame = EsSparkSQL.esDF(spark.sqlContext, "my_document/doc", query).cache()
 
 
@@ -62,30 +61,31 @@ object TFIDFdemo extends App {
     .setVocabSize(10000)
     .setMinDF(2)
     .fit(removerWordsData)
-
   val featurizedData: DataFrame = cvModel.transform(removerWordsData)
 
 
   val idf = new IDF().setInputCol("rawFeatures").setOutputCol("features")
   val idfModel = idf.fit(featurizedData)
-
   val rescaledData: DataFrame = idfModel.transform(featurizedData)
 
 
-  val vocabulary: Array[String] = cvModel.vocabulary
+  val voc: Array[String] = cvModel.vocabulary
   val getKeyWordsFun = udf((fea: Vector) =>{
     var arrw = ArrayBuffer[String]()
     var arrv = ArrayBuffer[Double]()
     fea.foreachActive((index: Int, value: Double) =>{
-      arrw += vocabulary(index)
+      arrw += voc(index)
       arrv += value
     })
     (arrw zip arrv).toList.sortBy(-_._2).take(10).map(x => x._1).toArray
   })
 
-  val keywords: DataFrame = rescaledData.withColumn("keyword", getKeyWordsFun(col("features"))).select("fileNameHashCode", "keyword")
+  val keywords: DataFrame = rescaledData
+    .withColumn("keyword", getKeyWordsFun(col("features")))
+    .select("fileNameHashCode", "keyword")
 
-  val result: DataFrame = df.join(keywords, Seq("fileNameHashCode"), "left").select("fileNameHashCode", "fileName", "keyword", "document")
+  val result: DataFrame = df.join(keywords, Seq("fileNameHashCode"), "left")
+    .select("fileNameHashCode", "fileName", "keyword", "document")
 
   EsSparkSQL.saveToEs(result, "my_document_keywords/doc", Map("es.mapping.id" -> "fileNameHashCode"))
 
