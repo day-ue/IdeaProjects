@@ -1,5 +1,6 @@
 package com.yuepengfei.monitor.sparkstreaming
 
+import lombok.extern.slf4j.Slf4j
 import org.apache.log4j.{Level, Logger}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession

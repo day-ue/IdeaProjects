@@ -57,6 +57,7 @@ object SparkStreamingWordCountDemo {
     //3. 遍历每一个rdd, 自己完成窗口操作
     //operation2RDD(spark, ds, kafkaParams)
 
+    scc.stop(true, true)
     scc.start()
     scc.awaitTermination()
   }

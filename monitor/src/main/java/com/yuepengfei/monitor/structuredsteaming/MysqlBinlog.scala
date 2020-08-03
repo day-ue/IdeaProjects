@@ -16,9 +16,9 @@ object MysqlBinlog extends App {
     format("org.apache.spark.sql.mlsql.sources.MLSQLBinLogDataSource").
     option("host","localhost").
     option("port","3306").
-    option("userName","dayue").
-    option("password","111111").
-    option("databaseNamePattern","dayue_test").
+    option("userName","root").
+    option("password","102079").
+    option("databaseNamePattern","yuepengfei").
     option("tableNamePattern","student").
     option("bingLogNamePrefix","student").
     option("binlogIndex","10").
@@ -27,8 +27,8 @@ object MysqlBinlog extends App {
 
   val query = df.writeStream.
     format("org.apache.spark.sql.delta.sources.MLSQLDeltaDataSource").
-    option("__path__","./data/spark-warehouse/dayue_test/student").
-    option("path","dayue_test/student").
+    option("__path__","./data/spark-warehouse/yupengfei/student").
+    option("path","yuepengfei/student").
     option("mode","Append").
     option("idCols","id").
     option("duration","3").
