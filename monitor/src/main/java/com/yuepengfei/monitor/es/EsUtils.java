@@ -165,24 +165,4 @@ public class EsUtils {
         boolean succeeded = clearScrollResponse.isSucceeded();
         return hm;
     }
-
-
-    public static void main(String[] args) throws IOException {
-        RestHighLevelClient client = EsUtils.getClient("192.168.124.131");
-        HashMap<String, String> hm = EsUtils.queryTermScroll(client, "word_time_flag", "doc", "word", "spark");
-        for (String key : hm.keySet()) {
-            System.out.println(key+"    --> "+hm.get(key));
-        }
-        /*HashMap<String, String> hashMap = new HashMap<>();
-        HashMap<String, String> hashMap2 = new HashMap<>();
-        hashMap.put("key", "1");
-        hashMap2.put("key", "2");
-        ArrayList<HashMap<String, String>> hashMaps = new ArrayList<>();
-        hashMaps.add(hashMap);
-        hashMaps.add(hashMap2);
-        EsUtils.addBulk(client, "my_document", "doc", hashMaps);*/
-        client.close();
-    }
-
-
 }
