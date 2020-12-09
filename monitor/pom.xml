@@ -25,7 +25,7 @@
         <jedis.version>2.9.0</jedis.version>
         <akka.version>2.5.27</akka.version>
         <delta.version>0.5.0</delta.version>
-        <groovy.version>2.5.9</groovy.version>
+        <groovy.version>2.5.14</groovy.version>
         <encoding>UTF-8</encoding>
 <!--        <scope.version>provided</scope.version>-->
         <scope.version>compile</scope.version>
